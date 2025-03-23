@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import './styles.css';
 
 function ThreatDashboard() {
     const [data, setData] = useState([]);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch('/threats')
-            .then(response => response.json())
-            .then(data => setData(data))
-            .catch(error => console.error(error));
+        fetch('http://127.0.0.1:5000/threats') // Fetch data from the backend API
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                setData(data); // Set the state with fetched data
+            })
+            .catch(err => {
+                setError(err.message); // Handle errors gracefully
+            });
     }, []);
 
     return (
         <div className="container">
             <h1>Threat Dashboard</h1>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
+            {error ? (
+                <p>Error: {error}</p> // Display error message if an error occurs
+            ) : (
+                <pre>{JSON.stringify(data, null, 2)}</pre> // Display fetched data
+            )}
         </div>
     );
 }
