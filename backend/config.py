@@ -13,5 +13,5 @@ class Config:
     VIRUSTOTAL_API_KEY = os.getenv('VIRUSTOTAL_API_KEY', 'your_virustotal_api_key_here')
     SHODAN_API_KEY = os.getenv('SHODAN_API_KEY', 'your_shodan_api_key_here')
 
-    # Other Configurations
-    SECRET_KEY = os.getenv('SECRET_KEY', 'your_secret_key')
+    # Flask Secret Key
+    SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')  # Reads your new secret key
