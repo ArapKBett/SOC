@@ -1,6 +1,9 @@
+from database import fetch_alerts
+
 def get_alerts():
-    alerts = [
-        {"id": 1, "type": "Malicious IP detected", "timestamp": "2025-03-23T14:00:00"},
-        {"id": 2, "type": "Phishing site reported", "timestamp": "2025-03-23T14:30:00"}
-    ]
-    return {"alerts": alerts}
+    try:
+        # Fetch data from the MongoDB alerts collection
+        alert_data = fetch_alerts()
+        return {"alerts": alert_data}
+    except Exception as e:
+        return {"error": str(e)}
