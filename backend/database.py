@@ -1,18 +1,21 @@
-from sqlalchemy import create_engine, Column, String, Integer
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from pymongo import MongoClient
 
-Base = declarative_base()
+# Initialize MongoDB client and database
+client = MongoClient('mongodb://localhost:27017/')  # Replace localhost if connecting to a remote database
+db = client['cyber_threat_dashboard']  # Database name
 
-class Threat(Base):
-    __tablename__ = 'threats'
-    id = Column(Integer, primary_key=True)
-    type = Column(String)
-    timestamp = Column(String)
+# Collections for storing threat data and alerts
+threats_collection = db['threats']
+alerts_collection = db['alerts']
 
-def init_db():
-    engine = create_engine('sqlite:///dashboard.db')
-    Base.metadata.create_all(engine)
-    return sessionmaker(bind=engine)()
+# Example function to insert data into MongoDB
+def insert_threat(threat):
+    threats_collection.insert_one(threat)
 
-db_session = init_db()
+# Example function to fetch all threats
+def fetch_threats():
+    return list(threats_collection.find({}, {'_id': 0}))  # Exclude the MongoDB ObjectID field
+
+# Example function to fetch all alerts
+def fetch_alerts():
+    return list(alerts_collection.find({}, {'_id': 0}))
